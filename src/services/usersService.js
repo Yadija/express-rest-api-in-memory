@@ -10,6 +10,7 @@ import users from '../utils/users.js';
 
 const verifyNewUsername = async (username) => {
   const findIndex = users.findIndex((user) => user.username === username);
+
   if (findIndex !== -1) {
     throw new InvariantError('username already exists');
   }
@@ -17,20 +18,13 @@ const verifyNewUsername = async (username) => {
 
 const addUser = async ({ username, password, fullname }) => {
   await verifyNewUsername(username);
-  const id = `users-${nanoid(15)}`;
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  if (!username || !fullname || !password) {
-    throw new InvariantError('username must to fill');
-  }
-
-  if (typeof username !== 'string' || typeof fullname !== 'string' || typeof password !== 'string') {
-    throw new InvariantError('username must to fill');
-  }
 
   if (/\s/.test(username)) {
     throw new InvariantError('username contain forbiden character');
   }
+
+  const id = `users-${nanoid(15)}`;
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   users.push({
     id, username, password: hashedPassword, fullname,

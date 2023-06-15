@@ -1,8 +1,12 @@
 // services
 import usersService from '../services/usersService.js';
 
+// validator
+import UsersValidator from '../validator/users/index.js';
+
 const postUserController = async (req, res, next) => {
   try {
+    UsersValidator.validateUserPayload(req.body);
     const id = await usersService.addUser(req.body);
 
     res.status(201).json({
