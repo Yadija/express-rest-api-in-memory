@@ -1,39 +1,33 @@
-// utils
-import users from '../utils/users.js';
-
 // services
 import usersService from '../services/usersService.js';
 
-const postUserController = async (req, res) => {
-  const id = await usersService.addUser(req.body);
+const postUserController = async (req, res, next) => {
+  try {
+    const id = await usersService.addUser(req.body);
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      userId: id,
-    },
-  });
+    res.status(201).json({
+      status: 'success',
+      data: {
+        userId: id,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const getUsersByIdController = async (req, res) => {
-  const { userId } = req.params;
+const getUsersByIdController = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
 
-  const findIndex = users.findIndex((user) => user.id === userId);
-
-  if (findIndex === -1) {
-    res.status(404).json({
-      status: 'fail',
-      message: 'cannot find user',
+    const user = await usersService.getUserById(userId);
+    res.status(200).json({
+      status: 'success',
+      data: user,
     });
-
-    return;
+  } catch (error) {
+    next(error);
   }
-
-  const user = await usersService.getUserById(userId);
-  res.status(200).json({
-    status: 'success',
-    data: user,
-  });
 };
 
 export default { postUserController, getUsersByIdController };
