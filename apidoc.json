@@ -555,7 +555,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Authentication User / Login",
             "content": {
               "application/json": {

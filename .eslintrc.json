@@ -9,6 +9,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "import/extensions": "off",
         "linebreak-style": "off"
     }
 }
