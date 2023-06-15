@@ -1,8 +1,9 @@
-import jwt from 'jsonwebtoken';
-
 // services
 import authenticationsService from '../services/authenticationsService.js';
 import usersService from '../services/usersService.js';
+
+// token
+import tokenManager from '../tokenize/tokenManager.js';
 
 // validator
 import AuthenticationsValidator from '../validator/authentications/index.js';
@@ -14,18 +15,10 @@ const postAuthenticationController = async (req, res, next) => {
     const { username, password } = req.body;
     const id = await usersService.verifyUserCredential(username, password);
 
-    const accessToken = jwt.sign(
-      { id },
-      process.env.ACCESS_TOKEN_KEY,
-      { expiresIn: process.env.ACCESS_TOKEN_AGE },
-    );
-    const refreshToken = jwt.sign(
-      { id },
-      process.env.REFRESH_TOKEN_KEY,
-      { expiresIn: process.env.ACCESS_TOKEN_AGE },
-    );
+    const accessToken = tokenManager.generateAccessToken({ id });
+    const refreshToken = tokenManager.generateRefreshToken({ id });
 
-    await authenticationsService.addRefreshToken(refreshToken);
+    authenticationsService.addRefreshToken(refreshToken);
 
     res.status(201).json({
       status: 'success',
@@ -39,4 +32,47 @@ const postAuthenticationController = async (req, res, next) => {
   }
 };
 
-export default { postAuthenticationController };
+const putAuthenticationController = async (req, res, next) => {
+  try {
+    AuthenticationsValidator.validatePutAuthenticationPayload(req.body);
+
+    const { refreshToken } = req.body;
+    authenticationsService.verifyRefreshToken(refreshToken);
+
+    const { id } = tokenManager.verifyRefreshToken(refreshToken);
+    const accessToken = tokenManager.generateAccessToken({ id });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        accessToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteAuthenticationController = async (req, res, next) => {
+  try {
+    AuthenticationsValidator.validateDeleteAuthenticationPayload(req.body);
+
+    const { refreshToken } = req.body;
+
+    authenticationsService.verifyRefreshToken(refreshToken);
+    authenticationsService.deleteRefreshToken(refreshToken);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Refresh token berhasil dihapus',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  postAuthenticationController,
+  putAuthenticationController,
+  deleteAuthenticationController,
+};
