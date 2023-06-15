@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { nanoid } from 'nanoid';
 
 // exceptions
+import AuthenticationError from '../exceptions/AuthenticationError.js';
 import InvariantError from '../exceptions/InvariantError.js';
 import NotFoundError from '../exceptions/NotFoundError.js';
 
@@ -45,4 +46,22 @@ const getUserById = async (userId) => {
   return { id, username, fullname };
 };
 
-export default { addUser, getUserById };
+const verifyUserCredential = async (username, password) => {
+  const findIndex = users.findIndex((user) => user.username === username);
+
+  if (findIndex === -1) {
+    throw new InvariantError('username not register');
+  }
+
+  const { id, password: hashedPassword } = users[findIndex];
+
+  const match = await bcrypt.compare(password, hashedPassword);
+
+  if (!match) {
+    throw new AuthenticationError('password incorrect');
+  }
+
+  return id;
+};
+
+export default { addUser, getUserById, verifyUserCredential };
