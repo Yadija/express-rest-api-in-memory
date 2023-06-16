@@ -133,7 +133,7 @@
                           "items": {
                             "type": "object",
                             "properties": {
-                              "threadId": {
+                              "id": {
                                 "type": "string"
                               },
                               "content": {
@@ -185,7 +185,7 @@
                         "thread": {
                           "type": "object",
                           "properties": {
-                            "threadId": {
+                            "id": {
                               "type": "string"
                             },
                             "content": {
@@ -653,16 +653,6 @@
               }
             }
           },
-          "404": {
-            "description": "Failed to renew token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Failed to renew token",
             "content": {
@@ -698,16 +688,6 @@
             }
           },
           "400": {
-            "description": "Failed to remove token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
-                }
-              }
-            }
-          },
-          "404": {
             "description": "Failed to remove token",
             "content": {
               "application/json": {

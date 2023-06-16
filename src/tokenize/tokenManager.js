@@ -20,7 +20,7 @@ const tokenManager = {
 
       return payload;
     } catch (error) {
-      throw new InvariantError('refresh token invalid');
+      throw new InvariantError('invalid refresh token');
     }
   },
 };
