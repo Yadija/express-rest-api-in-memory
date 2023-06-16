@@ -9,17 +9,17 @@ const addRefreshToken = (refreshToken) => {
 };
 
 const verifyRefreshToken = (refreshToken) => {
-  const findIndex = token.findIndex((tkn) => tkn === refreshToken);
+  const index = token.findIndex((tkn) => tkn === refreshToken);
 
-  if (findIndex === -1) {
-    throw new InvariantError('Refresh token invalid');
+  if (index === -1) {
+    throw new InvariantError('invalid refresh token');
   }
 };
 
 const deleteRefreshToken = (refreshToken) => {
-  const findIndex = token.findIndex((tkn) => tkn === refreshToken);
+  const index = token.findIndex((tkn) => tkn === refreshToken);
 
-  token.splice(findIndex, 1);
+  token.splice(index, 1);
 };
 
 export default { addRefreshToken, verifyRefreshToken, deleteRefreshToken };

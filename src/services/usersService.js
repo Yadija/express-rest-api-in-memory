@@ -10,9 +10,9 @@ import NotFoundError from '../exceptions/NotFoundError.js';
 import users from '../utils/users.js';
 
 const verifyNewUsername = async (username) => {
-  const findIndex = users.findIndex((user) => user.username === username);
+  const index = users.findIndex((user) => user.username === username);
 
-  if (findIndex !== -1) {
+  if (index !== -1) {
     throw new InvariantError('username already exists');
   }
 };
@@ -24,7 +24,7 @@ const addUser = async ({ username, password, fullname }) => {
     throw new InvariantError('username contain forbiden character');
   }
 
-  const id = `users-${nanoid(15)}`;
+  const id = `user-${nanoid(15)}`;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   users.push({
@@ -35,25 +35,24 @@ const addUser = async ({ username, password, fullname }) => {
 };
 
 const getUserById = async (userId) => {
-  const findIndex = users.findIndex((user) => user.id === userId);
+  const index = users.findIndex((user) => user.id === userId);
 
-  if (findIndex === -1) {
+  if (index === -1) {
     throw new NotFoundError('Cannot find user');
   }
 
-  const { id, username, fullname } = users[findIndex];
-
+  const { id, username, fullname } = users[index];
   return { id, username, fullname };
 };
 
 const verifyUserCredential = async (username, password) => {
-  const findIndex = users.findIndex((user) => user.username === username);
+  const index = users.findIndex((user) => user.username === username);
 
-  if (findIndex === -1) {
+  if (index === -1) {
     throw new InvariantError('username not register');
   }
 
-  const { id, password: hashedPassword } = users[findIndex];
+  const { id, password: hashedPassword } = users[index];
 
   const match = await bcrypt.compare(password, hashedPassword);
 
