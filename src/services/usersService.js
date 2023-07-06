@@ -49,7 +49,7 @@ const verifyUserCredential = async (username, password) => {
   const index = users.findIndex((user) => user.username === username);
 
   if (index === -1) {
-    throw new InvariantError('username not register');
+    throw new InvariantError('username or password incorrect');
   }
 
   const { id, password: hashedPassword } = users[index];
@@ -57,7 +57,7 @@ const verifyUserCredential = async (username, password) => {
   const match = await bcrypt.compare(password, hashedPassword);
 
   if (!match) {
-    throw new AuthenticationError('password incorrect');
+    throw new AuthenticationError('username or password incorrect');
   }
 
   return id;
