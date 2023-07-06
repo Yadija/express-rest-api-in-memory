@@ -20,10 +20,6 @@ const verifyNewUsername = async (username) => {
 const addUser = async ({ username, password, fullname }) => {
   await verifyNewUsername(username);
 
-  if (/\s/.test(username)) {
-    throw new InvariantError('username contain forbiden character');
-  }
-
   const id = `user-${nanoid(15)}`;
   const hashedPassword = await bcrypt.hash(password, 10);
 
