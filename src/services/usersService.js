@@ -45,7 +45,7 @@ const verifyUserCredential = async (username, password) => {
   const index = users.findIndex((user) => user.username === username);
 
   if (index === -1) {
-    throw new InvariantError('username or password incorrect');
+    throw new AuthenticationError('username or password incorrect');
   }
 
   const { id, password: hashedPassword } = users[index];
