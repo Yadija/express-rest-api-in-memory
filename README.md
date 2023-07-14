@@ -1,6 +1,10 @@
 # Express Rest API
----
 
-</br>
+## 🚀Installation
 
-See <i>branch</i> for code result
+- Clone this repository
+  - `git clone https://github.com/Yadija/express-rest-api-in-memory.git`
+- Install dependencies
+  - `npm install`
+- Running API
+  - `npm start`
